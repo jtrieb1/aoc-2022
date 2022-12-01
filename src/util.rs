@@ -23,14 +23,14 @@ where
     T: FromStr,
     <T as FromStr>::Err: 'static + std::error::Error,
 {
-    let mut nums: Vec<T> = Vec::new();
+    let mut all_parsed: Vec<T> = Vec::new();
     for line in lines.split('\n') {
         let line = line.trim();
         if line.is_empty() {
             continue;
         }
-        let num = line.parse::<T>()?;
-        nums.push(num);
+        let parsed = line.parse::<T>()?;
+        all_parsed.push(parsed);
     }
-    Ok(nums)
+    Ok(all_parsed)
 }
