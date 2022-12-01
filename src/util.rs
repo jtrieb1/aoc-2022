@@ -1,5 +1,15 @@
 use std::str::FromStr;
 
+pub trait AOCSolution {
+    fn load_from(input_file_path: &str) -> Result<Self, Box<dyn std::error::Error>> where Self: Sized;
+    fn part_1(&mut self) -> String {
+        "TODO!".to_string()
+    }
+    fn part_2(&mut self) -> String {
+        "TODO!".to_string()
+    }
+}
+
 pub fn read_input_to_str(input_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     let input_contents = std::fs::read_to_string(input_path)?;
     let input_contents = input_contents.trim().to_string();
