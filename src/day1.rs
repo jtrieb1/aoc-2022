@@ -82,9 +82,7 @@ impl ElfInventory {
 mod test {
     use super::*;
 
-    #[test]
-    fn given_test() {
-        let test_input = "
+    const TEST_INPUT: &'static str = "
         1000
         2000
         3000
@@ -99,10 +97,22 @@ mod test {
         9000
 
         10000
-        ";
+    ";
 
-        let manifest = ElfManifest::new_from_str(test_input).expect("Failed to parse manifest.");
+    #[test]
+    fn given_test() {
+        let manifest = ElfManifest::new_from_str(TEST_INPUT).expect("Failed to parse manifest.");
         let result = manifest.get_max_calories();
         assert!(result == 24000);
+    }
+
+    #[test]
+    fn check_max_is_sum_1() {
+        let manifest = ElfManifest::new_from_str(TEST_INPUT).expect("Failed to parse manifest.");
+
+        let result1 = manifest.get_max_calories();
+        let result2 = manifest.get_top_n_calorie_sum(1);
+
+        assert!(result1 == result2);
     }
 }
