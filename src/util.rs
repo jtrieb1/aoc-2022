@@ -11,7 +11,7 @@ pub trait AOCSolution {
 }
 
 macro_rules! solution {
-    ($s:ty, $day:expr) => {
+    (Day $day:expr => $s:ty) => {
         pub fn solution() -> Result<Box<$s>, Box<dyn std::error::Error>> {
             <$s>::load_from(&format!("input/day{}.txt", $day))
         }

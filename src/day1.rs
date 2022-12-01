@@ -1,6 +1,6 @@
 use crate::util::*;
 
-solution!(ElfManifest, 1);
+solution!(Day 1 => ElfManifest);
 
 pub struct ElfManifest {
     inventories: Vec<ElfInventory>,
