@@ -18,7 +18,7 @@ pub fn convert_str_to_sections(input: &str) -> Result<Vec<String>, Box<dyn std::
     Ok(sections)
 }
 
-pub fn parse_lines_to_nums<T>(lines: &str) -> Result<Vec<T>, Box<dyn std::error::Error>>
+pub fn parse_lines_into<T>(lines: &str) -> Result<Vec<T>, Box<dyn std::error::Error>>
 where
     T: FromStr,
     <T as FromStr>::Err: 'static + std::error::Error,

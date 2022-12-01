@@ -1,4 +1,4 @@
-use crate::{convert_str_to_sections, parse_lines_to_nums, read_input_to_str};
+use crate::{convert_str_to_sections, parse_lines_into, read_input_to_str};
 
 pub struct ElfManifest {
     inventories: Vec<ElfInventory>,
@@ -55,7 +55,7 @@ struct ElfInventory {
 
 impl ElfInventory {
     pub fn new(repr: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let entries = parse_lines_to_nums::<u32>(repr)?;
+        let entries = parse_lines_into::<u32>(repr)?;
 
         Ok(Self { entries })
     }
