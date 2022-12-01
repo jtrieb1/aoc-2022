@@ -1,7 +1,21 @@
-use crate::{convert_str_to_sections, parse_lines_into, read_input_to_str};
+use crate::{convert_str_to_sections, parse_lines_into, read_input_to_str, AOCSolution};
 
 pub struct ElfManifest {
     inventories: Vec<ElfInventory>,
+}
+
+impl AOCSolution for ElfManifest {
+    fn load_from(input_file_path: &str) -> Result<Self, Box<dyn std::error::Error>> where Self: Sized {
+        Self::new_from_file(input_file_path)
+    }
+
+    fn part_1(&mut self) -> String {
+        self.get_max_calories().to_string()
+    }
+
+    fn part_2(&mut self) -> String {
+        self.get_top_n_calorie_sum(3).to_string()
+    }
 }
 
 impl ElfManifest {
