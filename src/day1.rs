@@ -1,7 +1,7 @@
-use crate::{convert_str_to_sections, read_input_to_str};
+use crate::{convert_str_to_sections, parse_lines_to_nums, read_input_to_str};
 
 pub struct ElfManifest {
-    inventories: Vec<ElfInventory>
+    inventories: Vec<ElfInventory>,
 }
 
 impl ElfManifest {
@@ -25,11 +25,19 @@ impl ElfManifest {
     }
 
     pub fn get_max_calories(&self) -> u32 {
-        self.inventories.iter().map(|inv| inv.get_calories()).max().unwrap()
+        self.inventories
+            .iter()
+            .map(|inv| inv.get_calories())
+            .max()
+            .unwrap()
     }
 
     pub fn get_top_n_calorie_sum(&self, n: usize) -> u32 {
-        let mut cal_vec: Vec<u32> = self.inventories.iter().map(|inv| inv.get_calories()).collect();
+        let mut cal_vec: Vec<u32> = self
+            .inventories
+            .iter()
+            .map(|inv| inv.get_calories())
+            .collect();
         cal_vec.sort_unstable();
         let mut top = Vec::new();
         for _ in 0..n {
@@ -41,22 +49,15 @@ impl ElfManifest {
     }
 }
 
-pub struct ElfInventory {
-    entries: Vec<u32>
+struct ElfInventory {
+    entries: Vec<u32>,
 }
 
 impl ElfInventory {
     pub fn new(repr: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let mut entries = Vec::new();
-        for line in repr.split('\n') {
-            if line.is_empty() { continue; }
-            let entry = line.trim().parse::<u32>().map_err(|e| format!("{:?}: {}", e, line) )?;
-            entries.push(entry);
-        }
+        let entries = parse_lines_to_nums::<u32>(repr)?;
 
-        Ok(Self {
-            entries
-        })
+        Ok(Self { entries })
     }
 
     pub fn get_calories(&self) -> u32 {
