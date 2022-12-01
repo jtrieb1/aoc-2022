@@ -41,27 +41,24 @@ impl ElfManifest {
     }
 
     pub fn get_max_calories(&self) -> u32 {
-        self.inventories
-            .iter()
-            .map(|inv| inv.get_calories())
+        self.get_all_calorie_totals()
+            .into_iter()
             .max()
             .unwrap_or(0)
     }
 
     pub fn get_top_n_calorie_sum(&self, n: usize) -> u32 {
-        let mut cal_vec: Vec<u32> = self
+        let mut cal_vec: Vec<u32> = self.get_all_calorie_totals();
+        cal_vec.sort_unstable();
+        cal_vec.iter().rev().take(n).sum()
+    }
+
+    fn get_all_calorie_totals(&self) -> Vec<u32> {
+        self
             .inventories
             .iter()
             .map(|inv| inv.get_calories())
-            .collect();
-        cal_vec.sort_unstable();
-        let mut top = Vec::new();
-        for _ in 0..n {
-            if let Some(v) = cal_vec.pop() {
-                top.push(v);
-            }
-        }
-        top.iter().sum()
+            .collect()
     }
 }
 
