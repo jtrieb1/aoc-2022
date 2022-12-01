@@ -1,19 +1,27 @@
+use crate::{convert_str_to_sections, read_input_to_str};
+
 pub struct ElfManifest {
     inventories: Vec<ElfInventory>
 }
 
 impl ElfManifest {
-    pub fn new(input: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let input = input.trim();
+    pub fn new_from_file(input_path: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let input_str = read_input_to_str(input_path)?;
+        Self::new_from_str(&input_str)
+    }
+
+    pub fn new_from_str(input: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let sections = convert_str_to_sections(input)?;
+        Self::new(sections)
+    }
+
+    pub fn new(input_sections: Vec<String>) -> Result<Self, Box<dyn std::error::Error>> {
         let mut inventories = Vec::new();
-        for block in input.split("\n\n") {
-            if block.is_empty() { continue; }
-            let inv = ElfInventory::new(block.trim())?;
+        for section in input_sections.iter() {
+            let inv = ElfInventory::new(&section)?;
             inventories.push(inv);
         }
-        Ok(Self {
-            inventories
-        })
+        Ok(Self { inventories })
     }
 
     pub fn get_max_calories(&self) -> u32 {
@@ -79,7 +87,7 @@ mod test {
         10000
         ";
 
-        let manifest = ElfManifest::new(test_input).expect("Failed to parse manifest.");
+        let manifest = ElfManifest::new_from_str(test_input).expect("Failed to parse manifest.");
         let result = manifest.get_max_calories();
         assert!(result == 24000);
     }
