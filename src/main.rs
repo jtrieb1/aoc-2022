@@ -1,3 +1,4 @@
+#[macro_use]
 mod util;
 mod day1;
 
@@ -5,7 +6,7 @@ pub use util::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let solutions: Vec<Box<dyn AOCSolution>> = vec![
-        day1::ElfManifest::load_from("input/day1.txt")?,
+        day1::solution()?,
     ];
     print_solutions(solutions);
     Ok(())

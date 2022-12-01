@@ -10,6 +10,14 @@ pub trait AOCSolution {
     }
 }
 
+macro_rules! solution {
+    ($s:ty, $day:expr) => {
+        pub fn solution() -> Result<Box<$s>, Box<dyn std::error::Error>> {
+            <$s>::load_from(&format!("input/day{}.txt", $day))
+        }
+    };
+}
+
 pub fn read_input_to_str(input_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     let input_contents = std::fs::read_to_string(input_path)?;
     let input_contents = input_contents.trim().to_string();

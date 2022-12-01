@@ -1,4 +1,6 @@
-use crate::{convert_str_to_sections, parse_lines_into, read_input_to_str, AOCSolution};
+use crate::util::*;
+
+solution!(ElfManifest, 1);
 
 pub struct ElfManifest {
     inventories: Vec<ElfInventory>,
