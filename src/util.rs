@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 pub trait AOCSolution {
-    fn load_from(input_file_path: &str) -> Result<Self, Box<dyn std::error::Error>> where Self: Sized;
+    fn load_from(input_file_path: &str) -> Result<Box<Self>, Box<dyn std::error::Error>> where Self: Sized;
     fn part_1(&mut self) -> String {
         "TODO!".to_string()
     }

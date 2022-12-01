@@ -2,17 +2,20 @@ mod util;
 mod day1;
 
 pub use util::*;
-use day1::ElfManifest;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut manifest = ElfManifest::load_from("input/day1.txt")?;
-    print_solution(1, &mut manifest);
+    let solutions: Vec<Box<dyn AOCSolution>> = vec![
+        day1::ElfManifest::load_from("input/day1.txt")?,
+    ];
+    print_solutions(solutions);
     Ok(())
 }
 
-fn print_solution(day: u8, sol: &mut dyn AOCSolution) {
-    println!("Day {}:", day);
-    println!("Part 1: {}", sol.part_1());
-    println!("Part 2: {}", sol.part_2());
-    println!();
+fn print_solutions<'a>(mut solns: Vec<Box<dyn AOCSolution + 'a>>) {
+    for (day, sol) in solns.iter_mut().enumerate() {
+        println!("Day {}:", day + 1); // Zero-indexed
+        println!("Part 1: {}", sol.part_1());
+        println!("Part 2: {}", sol.part_2());
+        println!();
+    }
 }

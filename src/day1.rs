@@ -5,8 +5,8 @@ pub struct ElfManifest {
 }
 
 impl AOCSolution for ElfManifest {
-    fn load_from(input_file_path: &str) -> Result<Self, Box<dyn std::error::Error>> where Self: Sized {
-        Self::new_from_file(input_file_path)
+    fn load_from(input_file_path: &str) -> Result<Box<Self>, Box<dyn std::error::Error>> where Self: Sized {
+        Ok(Box::new(Self::new_from_file(input_file_path)?))
     }
 
     fn part_1(&mut self) -> String {
@@ -43,7 +43,7 @@ impl ElfManifest {
             .iter()
             .map(|inv| inv.get_calories())
             .max()
-            .unwrap()
+            .unwrap_or(0)
     }
 
     pub fn get_top_n_calorie_sum(&self, n: usize) -> u32 {
