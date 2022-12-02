@@ -5,13 +5,13 @@ pub struct LossDrawWinEncodingStrategy {}
 
 impl InstructionParsingStrategy for LossDrawWinEncodingStrategy {
     fn parse_encoded(&self, inst: &EncodedInstruction) -> Round {
-        let opponent = match inst.0 {
+        let opponent = match inst.opponent() {
             EncodedOpponentMove::A => Hand::Rock,
             EncodedOpponentMove::B => Hand::Paper,
             EncodedOpponentMove::C => Hand::Scissors,
         };
 
-        let player_outcome = match inst.1 {
+        let player_outcome = match inst.player() {
             EncodedPlayerMove::X => Outcome::Loss,
             EncodedPlayerMove::Y => Outcome::Draw,
             EncodedPlayerMove::Z => Outcome::Win,
