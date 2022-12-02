@@ -41,8 +41,7 @@ impl RPSStrategyGuide {
     fn get_total_score_using_encoding(&self, encoding: &dyn InstructionParsingStrategy) -> u32 {
         self.instructions
             .iter()
-            .map(|inst| encoding.parse_encoded(inst))
-            .map(|round| round.score())
+            .map(|inst| encoding.parse_encoded(inst).score())
             .sum()
     }
 }
