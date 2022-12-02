@@ -1,12 +1,14 @@
 #[macro_use]
 mod util;
 mod day1;
+mod day2;
 
 pub use util::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let solutions: Vec<Box<dyn AOCSolution>> = vec![
         day1::solution()?,
+        day2::solution()?,
     ];
     print_solutions(solutions);
     Ok(())
