@@ -15,15 +15,13 @@ impl AOCSolution for RPSStrategyGuide {
 
     fn part_1(&mut self) -> String {
         let encoding = NaturalEncodingStrategy {};
-        let rounds = self.get_rounds_using_strategy(&encoding);
-        let score = self.get_total_score_from_rounds(rounds);
+        let score = self.get_total_score_using_encoding(&encoding);
         format!("{}", score)
     }
 
     fn part_2(&mut self) -> String {
         let encoding = LossDrawWinEncodingStrategy {};
-        let rounds = self.get_rounds_using_strategy(&encoding);
-        let score = self.get_total_score_from_rounds(rounds);
+        let score = self.get_total_score_using_encoding(&encoding);
         format!("{}", score)
     }
 }
@@ -41,6 +39,11 @@ impl RPSStrategyGuide {
         })
     }
 
+    fn get_total_score_using_encoding(&self, encoding: &dyn InstructionParsingStrategy) -> u32 {
+        let rounds = self.get_rounds_using_strategy(encoding);
+        self.get_total_score_from_rounds(rounds)
+    }
+
     fn get_rounds_using_strategy(&self, strategy: &dyn InstructionParsingStrategy) -> Vec<Round> {
         self.instructions.iter().map(|inst| strategy.parse_encoded(inst)).collect()
     }
@@ -50,8 +53,6 @@ impl RPSStrategyGuide {
     }
 
 }
-
-impl std::error::Error for InstructionParseError {}
 
 struct EncodedInstruction(EncodedOpponentMove, EncodedPlayerMove);
 
@@ -89,6 +90,8 @@ impl Display for InstructionParseError {
         f.write_fmt(format_args!("{}", self.0))
     }
 }
+
+impl std::error::Error for InstructionParseError {}
 
 struct Round {
     player: Hand,
