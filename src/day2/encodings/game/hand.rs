@@ -2,7 +2,7 @@
 pub enum Hand {
     Rock,
     Paper,
-    Scissors
+    Scissors,
 }
 
 impl Hand {
@@ -10,16 +10,14 @@ impl Hand {
         match self {
             Hand::Rock => 1,
             Hand::Paper => 2,
-            Hand::Scissors => 3
+            Hand::Scissors => 3,
         }
     }
 
     pub fn versus(&self, other: &Hand) -> Outcome {
-        let win = self.beats();
-        let loss = self.beaten_by();
-        if *other == win {
+        if self.beats() == *other {
             Outcome::Win
-        } else if *other == loss {
+        } else if self.beaten_by() == *other {
             Outcome::Loss
         } else {
             Outcome::Draw
@@ -30,7 +28,7 @@ impl Hand {
         match self {
             Hand::Rock => Hand::Paper,
             Hand::Paper => Hand::Scissors,
-            Hand::Scissors => Hand::Rock
+            Hand::Scissors => Hand::Rock,
         }
     }
 
@@ -38,7 +36,7 @@ impl Hand {
         match self {
             Hand::Rock => Hand::Scissors,
             Hand::Paper => Hand::Rock,
-            Hand::Scissors => Hand::Paper
+            Hand::Scissors => Hand::Paper,
         }
     }
 
@@ -46,7 +44,7 @@ impl Hand {
         match outcome {
             Outcome::Draw => self.clone(),
             Outcome::Win => self.beaten_by(),
-            Outcome::Loss => self.beats()
+            Outcome::Loss => self.beats(),
         }
     }
 }
@@ -54,5 +52,5 @@ impl Hand {
 pub enum Outcome {
     Loss,
     Win,
-    Draw
+    Draw,
 }

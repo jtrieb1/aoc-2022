@@ -2,7 +2,7 @@ use super::{Hand, Outcome};
 
 pub struct Round {
     player: Hand,
-    opponent: Hand
+    opponent: Hand,
 }
 
 impl Round {
@@ -18,7 +18,7 @@ impl Round {
         match self.player.versus(&self.opponent) {
             Outcome::Win => self.player.score() + Self::WIN_SCORE,
             Outcome::Draw => self.player.score() + Self::DRAW_SCORE,
-            Outcome::Loss => self.player.score() + Self::LOSS_SCORE
+            Outcome::Loss => self.player.score() + Self::LOSS_SCORE,
         }
     }
 }

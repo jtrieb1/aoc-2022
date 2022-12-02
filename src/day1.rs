@@ -7,7 +7,10 @@ pub struct ElfManifest {
 }
 
 impl AOCSolution for ElfManifest {
-    fn load_from(input_file_path: &str) -> Result<Box<Self>, Box<dyn std::error::Error>> where Self: Sized {
+    fn load_from(input_file_path: &str) -> Result<Box<Self>, Box<dyn std::error::Error>>
+    where
+        Self: Sized,
+    {
         Ok(Box::new(Self::new_from_file(input_file_path)?))
     }
 
@@ -41,10 +44,7 @@ impl ElfManifest {
     }
 
     pub fn get_max_calories(&self) -> u32 {
-        self.get_all_calorie_totals()
-            .into_iter()
-            .max()
-            .unwrap_or(0)
+        self.get_all_calorie_totals().into_iter().max().unwrap_or(0)
     }
 
     pub fn get_top_n_calorie_sum(&self, n: usize) -> u32 {
@@ -54,8 +54,7 @@ impl ElfManifest {
     }
 
     fn get_all_calorie_totals(&self) -> Vec<u32> {
-        self
-            .inventories
+        self.inventories
             .iter()
             .map(|inv| inv.get_calories())
             .collect()

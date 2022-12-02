@@ -1,12 +1,12 @@
-use std::{str::FromStr, fmt::Display};
+use std::{fmt::Display, str::FromStr};
 
 mod game;
-mod natural;
 mod loss_draw_win;
+mod natural;
 
 use game::Round;
-pub use natural::NaturalEncodingStrategy;
 pub use loss_draw_win::LossDrawWinEncodingStrategy;
+pub use natural::NaturalEncodingStrategy;
 
 pub trait InstructionParsingStrategy {
     fn parse_encoded(&self, inst: &EncodedInstruction) -> Round;
@@ -15,27 +15,40 @@ pub trait InstructionParsingStrategy {
 pub struct EncodedInstruction(EncodedOpponentMove, EncodedPlayerMove);
 
 pub enum EncodedOpponentMove {
-    A, B, C
+    A,
+    B,
+    C,
 }
 
 pub enum EncodedPlayerMove {
-    X, Y, Z
+    X,
+    Y,
+    Z,
 }
 
 impl FromStr for EncodedInstruction {
     type Err = InstructionParseError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut instrs = s.split(' ').take(2).into_iter();
-        let opponent = match instrs.next().ok_or(InstructionParseError("Invalid instruction line"))? {
+
+        let opponent = match instrs
+            .next()
+            .ok_or(InstructionParseError("Invalid instruction line"))?
+        {
             "A" => EncodedOpponentMove::A,
             "B" => EncodedOpponentMove::B,
-            _ => EncodedOpponentMove::C
+            _ => EncodedOpponentMove::C,
         };
-        let player = match instrs.next().ok_or(InstructionParseError("Invalid instruction line"))? {
+
+        let player = match instrs
+            .next()
+            .ok_or(InstructionParseError("Invalid instruction line"))?
+        {
             "X" => EncodedPlayerMove::X,
             "Y" => EncodedPlayerMove::Y,
-            _ => EncodedPlayerMove::Z
+            _ => EncodedPlayerMove::Z,
         };
+
         Ok(Self(opponent, player))
     }
 }

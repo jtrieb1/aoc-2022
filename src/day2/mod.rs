@@ -1,7 +1,7 @@
 use crate::util::*;
 
-mod strategy_guide;
 mod encodings;
+mod strategy_guide;
 
 use strategy_guide::RPSStrategyGuide;
 
