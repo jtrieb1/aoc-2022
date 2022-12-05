@@ -3,6 +3,7 @@ mod util;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 pub use util::*;
 
@@ -11,6 +12,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         day1::solution()?,
         day2::solution()?,
         day3::solution()?,
+        day4::solution()?
     ];
     print_solutions(solutions);
     Ok(())
