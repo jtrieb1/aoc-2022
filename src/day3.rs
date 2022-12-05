@@ -1,5 +1,5 @@
 use crate::util::{read_input_to_str, parse_lines_into, AOCSolution};
-use std::{collections::HashSet, str::{FromStr, Chars}, fmt::Display};
+use std::{collections::HashSet, str::{FromStr, Chars}};
 
 solution!(Day 3 => RucksackCollection);
 
@@ -135,16 +135,7 @@ impl Compartment {
     }
 }
 
-#[derive(Debug)]
-struct RucksackParseError(&'static str);
-
-impl Display for RucksackParseError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", self.0))
-    }
-}
-
-impl std::error::Error for RucksackParseError {}
+custom_error!(RucksackParseError);
 
 fn char_score(c: &char) -> u32 {
     if c.is_uppercase() {

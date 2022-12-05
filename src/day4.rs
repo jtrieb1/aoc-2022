@@ -1,5 +1,5 @@
 use crate::util::{read_input_to_str, parse_lines_into, AOCSolution};
-use std::{str::FromStr, fmt::Display};
+use std::{str::FromStr};
 
 solution!(Day 4 => CampSectionRegistry);
 
@@ -114,16 +114,7 @@ impl CampRange {
     }
 }
 
-#[derive(Debug)]
-struct RangeParseError(&'static str);
-
-impl Display for RangeParseError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", self.0))
-    }
-}
-
-impl std::error::Error for RangeParseError {}
+custom_error!(RangeParseError);
 
 #[cfg(test)]
 mod test {

@@ -1,5 +1,4 @@
 use std::str::FromStr;
-use std::fmt::Display;
 
 pub struct EncodedInstruction(EncodedOpponentMove, EncodedPlayerMove);
 
@@ -74,13 +73,4 @@ impl FromStr for EncodedPlayerMove {
     }
 }
 
-#[derive(Debug)]
-pub struct InstructionParseError(&'static str);
-
-impl Display for InstructionParseError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", self.0))
-    }
-}
-
-impl std::error::Error for InstructionParseError {}
+custom_error!(InstructionParseError);

@@ -21,6 +21,21 @@ macro_rules! solution {
     };
 }
 
+macro_rules! custom_error {
+    ($name:ident) => {
+        #[derive(Debug)]
+        pub struct $name(&'static str);
+
+        impl std::fmt::Display for $name {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                f.write_fmt(format_args!("{}", self.0))
+            }
+        }
+
+        impl std::error::Error for $name {}
+    }
+}
+
 pub fn read_input_to_str(input_path: &str, trim: bool) -> Result<String, Box<dyn std::error::Error>> {
     let mut input_contents = std::fs::read_to_string(input_path)?;
     if trim {
