@@ -29,7 +29,7 @@ impl AOCSolution for RPSStrategyGuide {
 
 impl RPSStrategyGuide {
     fn new_from_file(input_file_path: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let input_str = read_input_to_str(input_file_path)?;
+        let input_str = read_input_to_str(input_file_path, true)?;
         Self::new_from_str(&input_str)
     }
 

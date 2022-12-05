@@ -25,12 +25,12 @@ impl AOCSolution for ElfManifest {
 
 impl ElfManifest {
     pub fn new_from_file(input_path: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let input_str = read_input_to_str(input_path)?;
+        let input_str = read_input_to_str(input_path, true)?;
         Self::new_from_str(&input_str)
     }
 
     pub fn new_from_str(input: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let sections = convert_str_to_sections(input)?;
+        let sections = convert_str_to_sections(input, true)?;
         Self::new(sections)
     }
 

@@ -21,20 +21,27 @@ macro_rules! solution {
     };
 }
 
-pub fn read_input_to_str(input_path: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let input_contents = std::fs::read_to_string(input_path)?;
-    let input_contents = input_contents.trim().to_string();
+pub fn read_input_to_str(input_path: &str, trim: bool) -> Result<String, Box<dyn std::error::Error>> {
+    let mut input_contents = std::fs::read_to_string(input_path)?;
+    if trim {
+        input_contents = input_contents.trim().to_string();
+    }
     Ok(input_contents)
 }
 
-pub fn convert_str_to_sections(input: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
-    let input_str = input.trim();
+pub fn convert_str_to_sections(mut input: &str, trim: bool) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    if trim {
+        input = input.trim();
+    }
     let mut sections: Vec<String> = Vec::new();
-    for chunk in input_str.split("\n\n") {
+    for mut chunk in input.split("\n\n") {
         if chunk.is_empty() {
             continue;
         }
-        sections.push(chunk.trim().to_string());
+        if trim {
+            chunk = chunk.trim();
+        }
+        sections.push(chunk.to_string());
     }
     Ok(sections)
 }
