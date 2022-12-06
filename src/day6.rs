@@ -116,7 +116,7 @@ impl Scanner {
     }
 
     fn check_unique(&self) -> bool {
-        self.counts.len() == self.buf_size && self.counts.values().all(|v| *v == 1)
+        self.counts.len() == self.buf_size 
     }
 }
 
