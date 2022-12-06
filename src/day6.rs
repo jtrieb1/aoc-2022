@@ -36,11 +36,11 @@ impl CommSystem {
     }
 
     pub fn scan_for_signal_start(&self) -> usize {
-        self.find_first_unique_substream_of_size_2(4)
+        self.find_first_unique_substream_of_size(4)
     }
 
     pub fn scan_for_message_start(&self) -> usize {
-        self.find_first_unique_substream_of_size_2(14)
+        self.find_first_unique_substream_of_size(14)
     }
 
     /*
@@ -61,15 +61,9 @@ impl CommSystem {
 
     */
 
-    fn find_first_unique_substream_of_size_2(&self, size: usize) -> usize {
+    fn find_first_unique_substream_of_size(&self, size: usize) -> usize {
         let mut scanner = Scanner::new(size);
-        for byte in self.stream.as_bytes().iter() {
-            scanner.consume(*byte);
-            if scanner.check_unique() {
-                return scanner.position;
-            }
-        }
-        0
+        scanner.scan(self.stream.as_bytes())
     }
 }
 
@@ -89,6 +83,16 @@ impl Scanner {
             position: 0,
         }
     }
+    
+    pub fn scan(&mut self, bytestream: &[u8]) -> usize {
+        for byte in bytestream.iter() {
+            self.consume(*byte);
+            if self.check_unique() {
+                return self.position;
+            }
+        }
+        0
+    }
 
     fn consume(&mut self, next: u8) {
         if self.buffer.len() == self.buf_size {
@@ -98,17 +102,17 @@ impl Scanner {
         self.append(next);
         self.position += 1;
     }
-
-    fn append(&mut self, next: u8) {
-        self.buffer.push(next);
-        self.counts.entry(next).and_modify(|v| *v += 1).or_insert(1);
-    }
-
+    
     fn remove(&mut self, byte: u8) {
         self.counts.entry(byte).and_modify(|v| *v -= 1);
         if self.counts[&byte] == 0 {
             self.counts.remove(&byte);
         }
+    }
+
+    fn append(&mut self, next: u8) {
+        self.buffer.push(next);
+        self.counts.entry(next).and_modify(|v| *v += 1).or_insert(1);
     }
 
     fn check_unique(&self) -> bool {
