@@ -21,7 +21,10 @@ impl AOCSolution for Forest {
     }
     
     fn part_2(&mut self) -> String {
-        let score = (0..self.trees.len()).map(|idx| self.get_scenic_score(idx)).max().unwrap();
+        let score = 
+            (0..self.trees.len())
+                .map(|idx| self.get_scenic_score(idx))
+                .max().unwrap();
         format!("{}", score)
     }
 }
@@ -83,14 +86,12 @@ impl Forest {
     fn get_scenic_score(&self, tree_idx: usize) -> usize {
         let tree = &self.trees[tree_idx];
         let paths = self.get_lines_from_tree_to_edge(tree_idx);
-        let mut total = 1;
-        for path in paths {
-            total *= self.count_visible_in_path(tree.height, path);
-        }
-        total
+        paths.iter()
+             .map(|p| self.count_visible_in_path(tree.height, p))
+             .product()
     }
     
-    fn count_visible_in_path(&self, my_height: u32, path: Vec<&Tree>) -> usize {
+    fn count_visible_in_path(&self, my_height: u32, path: &Vec<&Tree>) -> usize {
         let mut visible_ct = path.iter().take_while(|&&t| t.height < my_height).count();
         if visible_ct < path.len() { visible_ct += 1; } // Add one for blocking tree
         visible_ct
