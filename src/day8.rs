@@ -1,4 +1,5 @@
-use crate::util::{AOCSolution, read_input_to_str};
+use crate::util::{AOCSolution, read_input_to_str, str_to_grid_info, parse_each_char};
+use std::str::FromStr;
 
 solution!(Day 8 => Forest);
 
@@ -32,18 +33,9 @@ impl Forest {
     }
     
     pub fn new_from_str(input_str: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let mut lines = input_str.lines();
-        let width = lines.nth(0).map(|l| l.len()).unwrap();
-        lines = input_str.lines();
-        let height = lines.count();
-        let mut trees = Vec::new();
-        for c in input_str.split("") {
-            if c.is_empty() || c == "\n" { continue; }
-            let tree = Tree {
-                height: c.parse::<u32>()?
-            };
-            trees.push(tree);
-        }
+        let (width, height) = str_to_grid_info(input_str);
+        let trees = parse_each_char::<Tree>(input_str)?;
+        
         Ok(Self {
             trees,
             width,
@@ -58,7 +50,7 @@ impl Forest {
     
     fn on_edge(&self, tree_idx: usize) -> bool {
         let (x, y) = self.get_tree_coord(tree_idx);
-        x == 0 || y == 0 || x == self.width || y == self.height
+        x == 0 || y == 0 || x == self.width - 1 || y == self.height - 1
     }
     
     fn get_tree_coord(&self, tree_idx: usize) -> (usize, usize) {
@@ -93,11 +85,15 @@ impl Forest {
         let paths = self.get_lines_from_tree_to_edge(tree_idx);
         let mut total = 1;
         for path in paths {
-            let mut visible = path.iter().take_while(|&&t| t.height < tree.height).count();
-            if visible < path.len() { visible += 1; } // Add one for blocking tree
-            total *= visible; 
+            total *= self.count_visible_in_path(tree.height, path);
         }
         total
+    }
+    
+    fn count_visible_in_path(&self, my_height: u32, path: Vec<&Tree>) -> usize {
+        let mut visible_ct = path.iter().take_while(|&&t| t.height < my_height).count();
+        if visible_ct < path.len() { visible_ct += 1; } // Add one for blocking tree
+        visible_ct
     }
 }
 
@@ -105,6 +101,20 @@ impl Forest {
 struct Tree {
     height: u32
 }
+
+impl FromStr for Tree {
+    type Err = TreeParseErr;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s.len() != 1 {
+            return Err(TreeParseErr("Invalid string len"));
+        }
+        Ok(Tree {
+            height: s.parse::<u32>().map_err(|_| TreeParseErr("Invalid digit"))?
+        })
+    }
+}
+
+custom_error!(TreeParseErr);
 
 #[cfg(test)]
 mod test {

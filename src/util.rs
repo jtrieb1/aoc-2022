@@ -77,3 +77,25 @@ where
     }
     Ok(all_parsed)
 }
+
+// Width, Height
+pub fn str_to_grid_info(input: &str) -> (usize, usize) {
+    let mut lines = input.lines();
+    let width = lines.nth(0).map(|l| l.len()).unwrap();
+    lines = input.lines();
+    let height = lines.count();
+    (width, height)
+}
+
+pub fn parse_each_char<T>(s: &str) -> Result<Vec<T>, Box<dyn std::error::Error>>
+where
+    T: FromStr,
+    <T as FromStr>::Err: 'static + std::error::Error
+{
+    let mut res: Vec<T> = Vec::new();
+    for c in s.split("") {
+        if c.is_empty() || c == "\n" { continue; }
+        res.push(c.parse::<T>()?);
+    }
+    Ok(res)
+}
