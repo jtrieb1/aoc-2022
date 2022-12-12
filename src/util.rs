@@ -80,6 +80,7 @@ where
 
 // Width, Height
 pub fn str_to_grid_info(input: &str) -> (usize, usize) {
+    let input = input.trim();
     let mut lines = input.lines();
     let width = lines.nth(0).map(|l| l.len()).unwrap();
     lines = input.lines();

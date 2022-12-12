@@ -28,6 +28,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         day9::solution()?,
         day10::solution()?,
         day11::solution()?,
+        day12::solution()?,
     ];
     print_solutions(solutions);
     Ok(())
