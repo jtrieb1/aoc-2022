@@ -136,10 +136,10 @@ impl PartialOrd for PacketValue {
         match (self, other) {
             (PacketValue::Int(i), PacketValue::Int(j)) => i.partial_cmp(j),
             (PacketValue::Int(_), PacketValue::List(_)) => {
-                PacketValue::List(vec![Box::new(self.clone())]).partial_cmp(other)
+                self.transmute().unwrap().partial_cmp(other)
             }
             (PacketValue::List(_), PacketValue::Int(_)) => {
-                self.partial_cmp(&PacketValue::List(vec![Box::new(other.clone())]))
+                self.partial_cmp(&other.transmute().unwrap())
             }
             (PacketValue::List(l1), PacketValue::List(l2)) => {
                 let pairs = l1.iter().zip(l2.iter());
@@ -160,6 +160,15 @@ impl PartialOrd for PacketValue {
 impl Ord for PacketValue {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.partial_cmp(other).unwrap()
+    }
+}
+
+impl PacketValue {
+    fn transmute(&self) -> Option<Self> {
+        match self {
+            Self::Int(_) => Some(Self::List(vec![Box::new(self.clone())])),
+            _ => None,
+        }
     }
 }
 
