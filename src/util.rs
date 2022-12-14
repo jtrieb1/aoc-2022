@@ -1,7 +1,9 @@
 use std::str::FromStr;
 
+pub type SResult<T> = Result<T, Box<dyn std::error::Error>>;
+
 pub trait AOCSolution {
-    fn load_from(input_file_path: &str) -> Result<Box<Self>, Box<dyn std::error::Error>>
+    fn load_from(input_file_path: &str) -> SResult<Box<Self>>
     where
         Self: Sized;
         
@@ -36,7 +38,7 @@ macro_rules! custom_error {
     }
 }
 
-pub fn read_input_to_str(input_path: &str, trim: bool) -> Result<String, Box<dyn std::error::Error>> {
+pub fn read_input_to_str(input_path: &str, trim: bool) -> SResult<String> {
     let mut input_contents = std::fs::read_to_string(input_path)?;
     if trim {
         input_contents = input_contents.trim().to_string();
@@ -44,7 +46,7 @@ pub fn read_input_to_str(input_path: &str, trim: bool) -> Result<String, Box<dyn
     Ok(input_contents)
 }
 
-pub fn convert_str_to_sections(mut input: &str, trim: bool) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+pub fn convert_str_to_sections(mut input: &str, trim: bool) -> SResult<Vec<String>> {
     if trim {
         input = input.trim();
     }
@@ -61,7 +63,7 @@ pub fn convert_str_to_sections(mut input: &str, trim: bool) -> Result<Vec<String
     Ok(sections)
 }
 
-pub fn parse_lines_into<T>(lines: &str) -> Result<Vec<T>, Box<dyn std::error::Error>>
+pub fn parse_lines_into<T>(lines: &str) -> SResult<Vec<T>>
 where
     T: FromStr,
     <T as FromStr>::Err: 'static + std::error::Error,
@@ -88,7 +90,7 @@ pub fn str_to_grid_info(input: &str) -> (usize, usize) {
     (width, height)
 }
 
-pub fn parse_each_char<T>(s: &str) -> Result<Vec<T>, Box<dyn std::error::Error>>
+pub fn parse_each_char<T>(s: &str) -> SResult<Vec<T>>
 where
     T: FromStr,
     <T as FromStr>::Err: 'static + std::error::Error
