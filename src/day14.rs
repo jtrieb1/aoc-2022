@@ -102,18 +102,8 @@ struct Rock {
 impl FromStr for Rock {
     type Err = RockParseError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let segments = s.split(" -> ");
         let mut cells = Vec::new();
-        let mut coords = Vec::new();
-        for segment in segments {
-            let xy = segment.split(',').collect::<Vec<&str>>();
-            if xy.len() != 2 {
-                return Err(RockParseError("Invalid segment length, expected X,Y"));
-            }
-            let x = xy[0].parse::<usize>().map_err(|_| RockParseError("Invalid number"))?;
-            let y = xy[1].parse::<usize>().map_err(|_| RockParseError("Invalid number"))?;
-            coords.push((x, y));
-        }
+        let coords = Rock::parse_vertices(s)?;
         for endpoints in coords.windows(2) {
             let mut c1 = endpoints[0];
             let c2 = endpoints[1];
@@ -133,6 +123,20 @@ impl FromStr for Rock {
 custom_error!(RockParseError);
 
 impl Rock {
+    fn parse_vertices(s: &str) -> Result<Vec<(usize, usize)>, RockParseError> {
+        let mut coords = Vec::new();
+        for segment in s.split(" -> ") {
+            let xy = segment.split(',').collect::<Vec<&str>>();
+            if xy.len() != 2 {
+                return Err(RockParseError("Invalid segment length, expected X,Y"));
+            }
+            let x = xy[0].parse::<usize>().map_err(|_| RockParseError("Invalid number"))?;
+            let y = xy[1].parse::<usize>().map_err(|_| RockParseError("Invalid number"))?;
+            coords.push((x, y));
+        }
+        Ok(coords)
+    }
+    
     pub fn populate_blocked(&self, map: &mut HashSet<(usize, usize)>) {
         for cell in self.cells.iter() {
             map.insert(cell.clone());
